@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Leaflet Issue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet-src.js"></script>
+</head>
+
+<body>
+  <div id="map" style="height:300px"></div>
+  <div id="map2" style="height:300px"></div>
+
+  <script>
+    var data = [
+      {
+        "lat": 29.238433,
+        "long": 76.431885,
+        "name": "Haryana",
+        "pollution": 134
+      },
+      {
+        "lat": 19.601194,
+        "long": 75.552979,
+        "name": "Maharashtra",
+        "pollution": 70
+      },
+      {
+        "lat": 10.850516,
+        "long": 76.271080,
+        "name": "Kerala",
+        "pollution": 346
+      }
+    ]
+
+    var map = L.map("map", {
+      center: [0, 0],
+      zoom: 1
+    })
+
+    var map2 = L.map("map2", {
+      center: [0, 0],
+      zoom: 1
+    })
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map2);
+
+    var pointLayers = []
+    data.forEach(function (d) {
+      var mark = L.circle([d["lat"], d["long"]])
+      mark.setStyle({
+        radius: d['pollution'] * 1000
+      })
+      pointLayers.push(mark)
+    })
+    var featureLayer = L.featureGroup(pointLayers)
+    featureLayer.addTo(map)
+    map.fitBounds(featureLayer.getBounds())
+
+
+    var pointLayers2 = []
+    data.forEach(function (d) {
+      var mark = L.circleMarker([d["lat"], d["long"]])
+      mark.setStyle({
+        radius: d['pollution']
+      })
+      pointLayers2.push(mark)
+    })
+    var featureLayer2 = L.featureGroup(pointLayers2)
+    featureLayer2.addTo(map2)
+    map2.fitBounds(featureLayer2.getBounds())
+  </script>
+</body>
+
+</html>
